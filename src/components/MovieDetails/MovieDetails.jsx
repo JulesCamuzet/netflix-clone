@@ -1,7 +1,7 @@
 import { useLocation, useParams } from "react-router-dom";
 import "./MovieDetails.css";
 import getByID from "../../api/getByID";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function getGenreNameFromId(id) {
   const genres = {
@@ -33,12 +33,14 @@ const MovieDetails = () => {
 
   const [data, setData] = useState(null);
 
-  if (data === null) {
+  useEffect(() => {
     (async () => {
       let movieData = await getByID(movieId);
-      console.log(movieData);
       setData(movieData);
     })();
+  }, []);
+
+  if (data === null) {
     return <div></div>;
   } else {
     return (
