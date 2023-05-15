@@ -12,7 +12,7 @@ function App() {
         <Header />
         <Routes>
           <Route path="trends" element={<Trends />} />
-          <Route path="/details/:movieName" element={<MovieDetails />} />
+          <Route path="/details/:movieId" element={<MovieDetails />} />
           <Route path="/" element={<Navigate to={"/trends"} replace />} />
         </Routes>
       </HashRouter>

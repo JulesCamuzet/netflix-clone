@@ -1,5 +1,7 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import "./MovieDetails.css";
+import getByID from "../../api/getByID";
+import { useState } from "react";
 
 function getGenreNameFromId(id) {
   const genres = {
@@ -27,35 +29,45 @@ function getGenreNameFromId(id) {
 }
 
 const MovieDetails = () => {
-  const location = useLocation();
-  const movieData = location.state.movieData;
+  let { movieId } = useParams();
 
-  return (
-    <div className="movie-details">
-      <div className="details-left">
-        <div className="details-left-header">
-          <h1 className="details-movie-title">{movieData.title}</h1>
-          <div className="movie-genres">
-            {movieData.genre_ids.map((genreId, index) => {
-              return <span key={genreId}>{getGenreNameFromId(genreId)}</span>;
-            })}
+  const [data, setData] = useState(null);
+
+  if (data === null) {
+    (async () => {
+      let movieData = await getByID(movieId);
+      console.log(movieData);
+      setData(movieData);
+    })();
+    return <div></div>;
+  } else {
+    return (
+      <div className="movie-details">
+        <div className="details-left">
+          <div className="details-left-header">
+            <h1 className="details-movie-title">{data.title}</h1>
+            <div className="movie-genres">
+              {data.genres.map((genre, index) => {
+                return <span key={genre.id}>{genre.name}</span>;
+              })}
+            </div>
+            <h3 className="details-rate">
+              {Math.round(data.vote_average * 10) / 10}/10
+            </h3>
           </div>
-          <h3 className="details-rate">
-            {Math.round(movieData.vote_average * 10) / 10}/10
-          </h3>
+          <p className="details-overview">{data.overview}</p>
         </div>
-        <p className="details-overview">{movieData.overview}</p>
+        <div className="details-right">
+          <div
+            className="details-image-container"
+            style={{
+              backgroundImage: `url(https://image.tmdb.org/t/p/w500/${data.poster_path})`,
+            }}
+          ></div>
+        </div>
       </div>
-      <div className="details-right">
-        <div
-          className="details-image-container"
-          style={{
-            backgroundImage: `url(https://image.tmdb.org/t/p/w500/${movieData.poster_path})`,
-          }}
-        ></div>
-      </div>
-    </div>
-  );
+    );
+  }
 };
 
 export default MovieDetails;

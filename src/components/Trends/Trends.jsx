@@ -89,7 +89,7 @@ const Trends = () => {
               return (
                 <div key={movie.title} className="movie-card">
                   <Link
-                    to={`/details/${encodeURI(movie.title)}`}
+                    to={`/details/${movie.id}`}
                     state={{ movieData: movie }}
                   >
                     <div

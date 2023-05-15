@@ -22,7 +22,7 @@ const SearchResults = (props) => {
               return (
                 <span key={movie.id} className="search-result">
                   <Link
-                    to={`/details/${encodeURI(movie.title)}`}
+                    to={`/details/${movie.id}`}
                     state={{ movieData: movie }}
                     onClick={handleClick}
                   >
